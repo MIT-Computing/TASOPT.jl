@@ -500,8 +500,8 @@ function stickfig(ac::aircraft; ax = nothing, label_fs = 16)
             
             lnace = parg[iglnaceaft]
             x = parg[igxtshaft]
-            ax.plot([x,x, x+lnace, x+lnace, x], [ D/8,  D/8 + D,  D/8 + D*3/4,  D/8 + 1/4*D,  D/8], lw = 1.5, color = "r", zorder = 25)
-            ax.plot([x,x, x+lnace, x+lnace, x], [-D/8, -D/8 - D, -D/8 - D*3/4, -D/8 - 1/4*D, -D/8], lw = 1.5, color = "r", zorder = 25)
+            ax.plot([x,x, x+lnace, x+lnace, x], [ D/8,  D/8 + D,  D/8 + D*3/4,  D/8 + 1/4*D,  D/8], lw = 1.5, color = "k", zorder = 25)
+            ax.plot([x,x, x+lnace, x+lnace, x], [-D/8, -D/8 - D, -D/8 - D*3/4, -D/8 - 1/4*D, -D/8], lw = 1.5, color = "k", zorder = 25)
 
             D = parg[igdfan]
             neng = parg[igneng]
@@ -693,9 +693,9 @@ function plot_details(ac::aircraft; ax = nothing)
         CDlabels = ["CDi", "CDnace", "CDvtail", "CDhtail", "CDwing", "CDfuse"]
 
         label_bars(a, CDbars, CDlabels; val_multiplier = CD)
-        # a.legend(loc = "upper center")
-        # a.legend(bbox_to_anchor=(1.05, 1))
-        a.set_xlim(-1,3.5)
+        #a.legend(loc = "upper center")
+        #a.legend(bbox_to_anchor=(1.05, 1))
+        #a.set_xlim(-1,3.5)
 
         
         Wbar1 = a.bar(1.5, Wpayfrac  , bottom = Wemptyfrac + Wfuelfrac, width = bar_width, label = "Wpay")
@@ -754,7 +754,7 @@ function plot_details(ac::aircraft; ax = nothing)
         # ar.set_ylabel("Climb angle")
 
         # Draw stick figure to keep track
-        stickfig(ac; ax = ax[3], label_fs = 12)
+        stickfig(ac; ax = ax[3], label_fs = 8)
         plt.tight_layout()
 
         #Print other details:

@@ -31,5 +31,8 @@ TASOPT.weight_buildup(example_ac)
 
 # 5) Plot figures
 using PyPlot
-TASOPT.stickfig(example_ac)
+#TASOPT.stickfig(example_ac)
+#plt.savefig("B738_SC.png")
+
+TASOPT.plot_details(example_ac)
 plt.savefig("B738_SC.png")
