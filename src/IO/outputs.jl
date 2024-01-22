@@ -1566,3 +1566,248 @@ function high_res_airplane_plot(parg, pari, parm; ax = nothing, label_fs = 16, s
 
     return ax
 end
+
+
+"""
+    plot_details(parg, pari, para, parm; ax = nothing)
+
+`plot_details` combines a [`stickfig`](@ref) plot along with a mission summary,
+weight and drag buildup stacked bar charts to present results.
+"""
+function plot_breakdown(ac::aircraft; ax = nothing)
+
+    pari = ac.pari
+    parg = ac.parg
+    @views pare = ac.pare[:,:,1]
+    @views para = ac.para[:,:,1]
+    @views parm = ac.parm[:,:,1]
+        ## Create empty plot
+        if ax === nothing
+            # plt.style.use(["../miscellaneous/prash.mplstyle", "seaborn-colorblind"]) # HACK
+            fig, atemp = plt.subplots(2, 2, figsize=(8,5), dpi = 300, gridspec_kw=Dict("height_ratios"=>[1, 3], "width_ratios"=>[1,3]))
+            gs = atemp[1,2].get_gridspec()
+            gssub = matplotlib.gridspec.SubplotSpec(gs, 0,1)
+            atemp[1,1].remove()
+            atemp[1,2].remove()
+            axbig = fig.add_subplot(gssub)
+            ax = [axbig, atemp[2,1], atemp[2,2]]
+        else
+            for a in ax
+                a.cla()
+            end
+        end
+
+        # Drag build-up
+        LoD     = para[iaCL, ipcruise1]/ para[iaCD, ipcruise1]
+        CL      = para[iaCL, ipcruise1]
+        CD      = para[iaCD, ipcruise1]
+        CDfuse  = para[iaCDfuse, ipcruise1]
+        CDi     = para[iaCDi, ipcruise1]
+        CDwing  = para[iaCDwing, ipcruise1]
+        CDhtail = para[iaCDhtail, ipcruise1]
+        CDvtail = para[iaCDvtail, ipcruise1]
+        CDnace  = para[iaCDnace, ipcruise1]
+
+        CDfusefrac  = CDfuse /CD
+        CDifrac     = CDi    /CD
+        CDwingfrac  = CDwing /CD
+        CDhtailfrac = CDhtail/CD
+        CDvtailfrac = CDvtail/CD
+        CDnacefrac  = CDnace /CD
+
+        # Weight build-up
+        Wempty  = parg[igWMTO] - parg[igWfuel] - parg[igWpay]
+        Whpesys = parg[igWMTO] * parg[igfhpesys]
+        Wlgnose = parg[igWMTO] * parg[igflgnose]
+        Wlgmain = parg[igWMTO] * parg[igflgmain]
+        Wtotadd = Whpesys + Wlgnose + Wlgmain
+        
+        Wpay  = parg[igWpay]
+        Wfuel = parg[igWfuel]
+        WMTO  = parg[igWMTO]
+
+        Wwing  = parg[igWwing]
+        Wfuse  = parg[igWfuse]
+        Wvtail = parg[igWvtail]
+        Whtail = parg[igWhtail]
+        Wtesys = parg[igWtesys]
+        Wftank = parg[igWftank]
+        
+        # Compute weight fractions
+        Wwingfrac = Wwing /WMTO
+        Wfusefrac = Wfuse /WMTO
+        Wvtailfrac = Wvtail/WMTO
+        Whtailfrac = Whtail/WMTO
+        Wtesysfrac = Wtesys/WMTO
+        Wftankfrac = Wftank/WMTO
+        Wtotaddfrac = Wtotadd/WMTO
+
+        Wemptyfrac = Wempty/WMTO
+        Wfuelfrac  = Wfuel /WMTO
+        Wpayfrac   = Wpay  /WMTO
+
+        a = ax[2]
+        bar_width = 0.2
+        # ax[1,1].bar("CL", CL)
+        CDbars = []
+        push!(CDbars, a.bar(0, CDifrac    , width = bar_width, bottom = CDfusefrac+CDwingfrac+CDhtailfrac+CDvtailfrac+CDnacefrac, label = "CDi"))
+        push!(CDbars, a.bar(0, CDnacefrac , width = bar_width, bottom = CDfusefrac+CDwingfrac+CDhtailfrac+CDvtailfrac           , label = "CDnace"))
+        push!(CDbars, a.bar(0, CDvtailfrac, width = bar_width, bottom = CDfusefrac+CDwingfrac+CDhtailfrac                       , label = "CDvtail"))
+        push!(CDbars, a.bar(0, CDhtailfrac, width = bar_width, bottom = CDfusefrac+CDwingfrac                                   , label = "CDhtail"))
+        push!(CDbars, a.bar(0, CDwingfrac , width = bar_width, bottom = CDfusefrac                                              , label = "CDwing"))
+        push!(CDbars, a.bar(0, CDfusefrac , width = bar_width, label = "CDfuse"))
+        
+        CDlabels = ["CDi", "CDnace", "CDvtail", "CDhtail", "CDwing", "CDfuse"]
+
+        label_bars(a, CDbars, CDlabels; val_multiplier = CD)
+        a.legend(loc = "upper center")
+        a.legend(bbox_to_anchor=(1.05, 1))
+        a.set_xlim(-1,3.5)
+
+        
+        Wbar1 = a.bar(1.5, Wpayfrac  , bottom = Wemptyfrac + Wfuelfrac, width = bar_width, label = "Wpay")
+        Wbar2 = a.bar(1.5, Wfuelfrac , bottom = Wemptyfrac, width = bar_width, label = "Wfuel")
+        Wbar3 = a.bar(1.5, Wemptyfrac, width = bar_width, label = "Wempty")
+        Wbars = [Wbar1, Wbar2, Wbar3]
+        Wlabels = ["Wpay", "Wfuel", "Wempty"]
+        label_bars(a, Wbars, Wlabels, val_multiplier = WMTO/9.81/1000)
+        
+        Webars = []
+        push!(Webars, a.bar(3, Wtotaddfrac , bottom = Wfusefrac+Wwingfrac+Whtailfrac+Wvtailfrac+Wtesysfrac+Wftankfrac, width = bar_width, label = "Wadd"))
+        push!(Webars, a.bar(3, Wftankfrac  , bottom = Wfusefrac+Wwingfrac+Whtailfrac+Wvtailfrac+Wtesysfrac, width = bar_width, label = "Wftank"))
+        push!(Webars, a.bar(3, Wtesysfrac  , bottom = Wfusefrac+Wwingfrac+Whtailfrac+Wvtailfrac, width = bar_width, label = "Wtesys"))
+        push!(Webars, a.bar(3, Wvtailfrac  , bottom = Wfusefrac+Wwingfrac+Whtailfrac, width = bar_width, label = "Wvtail"))
+        push!(Webars, a.bar(3, Whtailfrac  , bottom = Wfusefrac+Wwingfrac, width = bar_width, label = "Whtail"))
+        push!(Webars, a.bar(3, Wwingfrac   , bottom = Wfusefrac, width = bar_width, label = "Wwing"))
+        push!(Webars, a.bar(3, Wfusefrac   , width = bar_width, label = "Wfuse"))
+        
+        Welabels = ["Wadd" "Wftank" "Wtesys" "Wvtail" "Whtail" "Wwing" "Wfuse"]
+        label_bars(a, Webars, Welabels, val_multiplier = WMTO/9.81/1000)
+
+        a.hlines(Wemptyfrac, 1.5+bar_width/2, 3-bar_width/2, lw=0.8, color = "k", ls = "--")
+        a.grid()
+        a.set_xticks([0, 1.5, 3])
+        a.set_xticklabels(["CD","WMTO", "Wempty"])
+
+        #Print other details:
+        # ax[3].text(48,20, @sprintf("WMTO = %.1f tons\n\$ \\Lambda \$ = %.1f\$ ^\\circ \$\n", parg[igWMTO]/9.81/1000, parg[igsweep]), va = "top")
+
+        return ax
+
+end
+
+function plot_breakdown_new(ac::aircraft; ax = nothing)
+
+    pari = ac.pari
+    parg = ac.parg
+    @views pare = ac.pare[:,:,1]
+    @views para = ac.para[:,:,1]
+    @views parm = ac.parm[:,:,1]
+        ## Create empty plot
+        if ax === nothing
+            # plt.style.use(["../miscellaneous/prash.mplstyle", "seaborn-colorblind"]) # HACK
+            fig, atemp = plt.subplots(1, 3, figsize=(12,4), dpi = 300)
+            #gs = atemp[1,2].get_gridspec()
+            
+            # Assign each subplot to ax array
+            ax = [atemp[1], atemp[2], atemp[3]]
+        else
+            for a in ax
+                a.cla()
+            end
+        end
+
+        # Drag build-up
+        LoD     = para[iaCL, ipcruise1]/ para[iaCD, ipcruise1]
+        CL      = para[iaCL, ipcruise1]
+        CD      = para[iaCD, ipcruise1]
+        CDfuse  = para[iaCDfuse, ipcruise1]
+        CDi     = para[iaCDi, ipcruise1]
+        CDwing  = para[iaCDwing, ipcruise1]
+        CDhtail = para[iaCDhtail, ipcruise1]
+        CDvtail = para[iaCDvtail, ipcruise1]
+        CDnace  = para[iaCDnace, ipcruise1]
+
+        CDfusefrac  = CDfuse /CD
+        CDifrac     = CDi    /CD
+        CDwingfrac  = CDwing /CD
+        CDhtailfrac = CDhtail/CD
+        CDvtailfrac = CDvtail/CD
+        CDnacefrac  = CDnace /CD
+
+        # Weight build-up
+        Wempty  = parg[igWMTO] - parg[igWfuel] - parg[igWpay]
+        Whpesys = parg[igWMTO] * parg[igfhpesys]
+        Wlgnose = parg[igWMTO] * parg[igflgnose]
+        Wlgmain = parg[igWMTO] * parg[igflgmain]
+        Wtotadd = Whpesys + Wlgnose + Wlgmain
+        
+        Wpay  = parg[igWpay]
+        Wfuel = parg[igWfuel]
+        WMTO  = parg[igWMTO]
+
+        Wwing  = parg[igWwing]
+        Wfuse  = parg[igWfuse]
+        Wvtail = parg[igWvtail]
+        Whtail = parg[igWhtail]
+        Wtesys = parg[igWtesys]
+        Wftank = parg[igWftank]
+        
+        # Compute weight fractions
+        Wwingfrac = Wwing /WMTO
+        Wfusefrac = Wfuse /WMTO
+        Wvtailfrac = Wvtail/WMTO
+        Whtailfrac = Whtail/WMTO
+        Wtesysfrac = Wtesys/WMTO
+        Wftankfrac = Wftank/WMTO
+        Wtotaddfrac = Wtotadd/WMTO
+
+        Wemptyfrac = Wempty/WMTO
+        Wfuelfrac  = Wfuel /WMTO
+        Wpayfrac   = Wpay  /WMTO
+
+        a = ax[1]
+        bar_width = 0.2
+        CDbars = []
+        push!(CDbars, a.bar(0, CDifrac    , width = bar_width, bottom = CDfusefrac+CDwingfrac+CDhtailfrac+CDvtailfrac+CDnacefrac, label = "CDi"))
+        push!(CDbars, a.bar(0, CDnacefrac , width = bar_width, bottom = CDfusefrac+CDwingfrac+CDhtailfrac+CDvtailfrac           , label = "CDnace"))
+        push!(CDbars, a.bar(0, CDvtailfrac, width = bar_width, bottom = CDfusefrac+CDwingfrac+CDhtailfrac                       , label = "CDvtail"))
+        push!(CDbars, a.bar(0, CDhtailfrac, width = bar_width, bottom = CDfusefrac+CDwingfrac                                   , label = "CDhtail"))
+        push!(CDbars, a.bar(0, CDwingfrac , width = bar_width, bottom = CDfusefrac                                              , label = "CDwing"))
+        push!(CDbars, a.bar(0, CDfusefrac , width = bar_width, label = "CDfuse"))
+        
+
+
+        a.legend(loc = "upper right")
+        a.set_xlim(-1,1)
+
+        a = ax[2]
+        bar_width = 0.2
+        Wbar1 = a.bar(0, Wpayfrac  , bottom = Wemptyfrac + Wfuelfrac, width = bar_width, label = "Wpay")
+        Wbar2 = a.bar(0, Wfuelfrac , bottom = Wemptyfrac, width = bar_width, label = "Wfuel")
+        Wbar3 = a.bar(0, Wemptyfrac, width = bar_width, label = "Wempty")
+        Wbars = [Wbar1, Wbar2, Wbar3]
+
+        a.legend(loc = "upper right")
+        a.set_xlim(-1,1)
+
+
+        a = ax[3]
+        bar_width = 0.2
+        Webars = []
+        push!(Webars, a.bar(0, Wtotaddfrac , bottom = Wfusefrac+Wwingfrac+Whtailfrac+Wvtailfrac+Wtesysfrac+Wftankfrac, width = bar_width, label = "Wadd"))
+        push!(Webars, a.bar(0, Wftankfrac  , bottom = Wfusefrac+Wwingfrac+Whtailfrac+Wvtailfrac+Wtesysfrac, width = bar_width, label = "Wftank"))
+        push!(Webars, a.bar(0, Wtesysfrac  , bottom = Wfusefrac+Wwingfrac+Whtailfrac+Wvtailfrac, width = bar_width, label = "Wtesys"))
+        push!(Webars, a.bar(0, Wvtailfrac  , bottom = Wfusefrac+Wwingfrac+Whtailfrac, width = bar_width, label = "Wvtail"))
+        push!(Webars, a.bar(0, Whtailfrac  , bottom = Wfusefrac+Wwingfrac, width = bar_width, label = "Whtail"))
+        push!(Webars, a.bar(0, Wwingfrac   , bottom = Wfusefrac, width = bar_width, label = "Wwing"))
+        push!(Webars, a.bar(0, Wfusefrac   , width = bar_width, label = "Wfuse"))
+
+        a.legend(loc = "upper right")
+        a.set_xlim(-1,1)
+        a.spines["bottom"].set_visible(true)
+        
+        return ax
+
+end
+
