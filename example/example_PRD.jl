@@ -121,8 +121,9 @@ function PayloadRange()
         println("-----------------------", abs(Max_range-prev_range))
     end
 
-
-
+    
+    println("Printing the PRD now")
+    
     figure()
     y_OEW = y_Wemtpy .+ y_payload
     plot(x_range ./ (1000*1852.0), y_OEW./ (9.8*1000), linestyle="-",  color="b", label="OEW + Payload ")
@@ -133,7 +134,7 @@ function PayloadRange()
     legend()
     grid()
 
-    savefig("./example/PayloadRangeExample.png")
+    savefig("PayloadRangeExample.png")
 
 end
 

@@ -55,10 +55,10 @@
 
 [Mission]
     N_missions = 2 # Number of missions to be modeled (first mission is the design mission)
-    pax = [110, 130]            # Number of passengers in each mission
-    max_pax = 130               # Maximum number of passengers for aircarft
-                                # B738 seats 162 pax in two-class layout
-                                # B738 seats 189 pax in one-class layout
+    pax = [108, 123]            # Number of passengers in each mission
+    max_pax = 123               # Maximum number of passengers for aircarft
+                                # B736 seats 108 pax in two-class layout
+                                # B736 seats 123 pax in one-class layout
                                 
     range = ["3235.0 nmi", "2000.0 nmi"] # Design Range + second mission range
 
@@ -179,18 +179,23 @@
 
     sweep = 25.0 # wing sweep in degrees
     AR    = 9.44
-    maxSpan = "112.58 ft"
+    maxSpan = "112.58 ft"  # 112 ft 7 inches
 
-    inner_panel_taper_ratio = 0.7  #cs/co
-    outer_panel_taper_ratio = 0.25 #ct/co
+    # The span-wise chord measurements are obtained from digitized blueprints from planning document.
+    #Root chord: 17.8340 - 11.1404 = 6.6936 m  (co)
+    #Yehud break chord: 17.8762 - 12.7534 = 5.1228 m  (cs)
+    # Wing tip cord: 21.4373 - 19.6955 = 1.7418 (ct)
 
-    panel_break_location = 0.285 # eta_s panel break eta location. eta = y/b
+    inner_panel_taper_ratio = 0.7653 #cs/co
+    outer_panel_taper_ratio = 0.2602 #ct/co
+
+    panel_break_location = 0.2815 # eta_s panel break eta location. eta = y/b
     
     center_box_halfspan = "71.0 in"
     box_width_chord = 0.50
     root_thickness_to_chord = 0.1268
     spanbreak_thickness_to_chord = 0.1266
-
+    
     hweb_to_hbox = 0.75 #web-height/hbox ratio
     spar_box_x_c = 0.40 # spar box axis x/c location
 
