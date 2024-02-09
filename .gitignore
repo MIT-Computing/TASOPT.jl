@@ -12,7 +12,6 @@
 *.perf
 *.PTF
 *.LTO
-**/Models/*
 Manifest.toml
 *.pptx
 *.DS_Store
