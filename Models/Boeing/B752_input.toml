@@ -4,8 +4,8 @@
     name = "B737-700"
     description = """
     This model file estimates the configuration parameters for the 
-    Boeing 757-700 airframe.
-    DATA SOURCE: Boeing Airport Planning Document: D6-58325-7
+    Boeing 757-200 airframe.
+    DATA SOURCE: Boeing Airport Planning Document: D6-58327
     """
 
 #-------------------------------------------------#
