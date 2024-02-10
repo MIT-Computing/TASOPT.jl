@@ -13,7 +13,7 @@ using TASOPT
 # Alternatively you can load your desired input file 
 #example_ac = read_aircraft_model("../src/IO/input.toml") # MODIFY <path> appropriately
 
-example_ac = read_aircraft_model("../Models/Boeing/B737_input.toml") # MODIFY <path> appropriately
+example_ac = read_aircraft_model("../Models/Boeing/B739_input.toml") # MODIFY <path> appropriately
 # 3) Size aircraft
 time_wsize = @elapsed size_aircraft!(example_ac)
 println("Time to size aircraft = $time_wsize s")
@@ -34,5 +34,5 @@ using PyPlot
 #TASOPT.stickfig(example_ac)
 #plt.savefig("B738_SC.png")
 
-TASOPT.plot_breakdown_new(example_ac)
-plt.savefig("B737.png")
+#TASOPT.plot_breakdown_new(example_ac)
+#plt.savefig("B752.png")

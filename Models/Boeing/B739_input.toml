@@ -1,11 +1,11 @@
 # This is a TOML input file that approximates the B737-800 airframe
 
 ["Aircraft Description"]
-    name = "B757-200"
+    name = "B737-900"
     description = """
     This model file estimates the configuration parameters for the 
-    Boeing 757-200 airframe.
-    DATA SOURCE: Boeing Airport Planning Document: D6-58327
+    Boeing 737-900 airframe.
+    DATA SOURCE: Boeing Airport Planning Document: D6-58325-7
     """
 
 #-------------------------------------------------#
@@ -55,12 +55,12 @@
 
 [Mission]
     N_missions = 2 # Number of missions to be modeled (first mission is the design mission)
-    pax = [219, 239]            # Number of passengers in each mission
-    max_pax = 239               # Maximum number of passengers for aircarft
-                                # B76 seats 108 pax in two-class layout
+    pax = [177, 215]            # Number of passengers in each mission
+    max_pax = 220               # Maximum number of passengers for aircarft
+                                # B736 seats 108 pax in two-class layout
                                 # B736 seats 123 pax in one-class layout
                                 
-    range = ["3915 nmi", "2000.0 nmi"] # Design Range + second mission range
+    range = ["3390 nmi", "2950.0 nmi"] # Design Range + second mission range
 
     weight_per_pax = "215.0 lbf" # Specify weight per passenger - 
                             # includes luggage [lbm or lbf or kg or N] 
@@ -93,7 +93,7 @@
 
 [Mission.Cruise]
     cruise_alt  = ["35000.0 ft", "30000 ft"]
-    cruise_mach = 0.8
+    cruise_mach = 0.79
     cruise_CL   = 0.57
 
 [Mission.Descent]
@@ -104,7 +104,7 @@
     cabin_pressure_altitude = "8000.0 ft"
 
 [Fuselage.Geometry]
-    radius = "74 in"       # Fuselage radius (EXTERIOR)
+    radius = "74 in"       # Fuselage radius
     dRadius = "15 in"      # Downward shift of lower bubbles
     y_offset = 0.0         # y offset of bubble center
     floor_depth = "5.0 in" # depth of floor beams
@@ -113,10 +113,11 @@
     a_nose = 1.65 # Nose radius = Rfuse*(1 - xi^a_nose)^(1/a_nose)
     b_tail = 2.0 # Tail radius = Rfuse*(1 - xi^b_tail)
 
-    # Vetical chord at tail cone base (aligned with rear end of door)
-    # Base chord: 21.1105 - 9.3487 = 11.7618
-    # Edge Chord: 17.8602 - 16.3717 = 1.4885
-    tailcone_taper = 0.1265  
+    # Vetical chord at tail cone base (aligned with rear end of door) (in meters)
+    # Base chord: 5.0672 - 1.9088 = 3.1583
+    # Edge Chord: 4.8937 - 3.7483 = 1.1454
+
+    tailcone_taper = 0.3627
     taper_fuse_to = "edge" # Options are "point" or "edge"
     
     # Tail load fuselage bending moment inertial relief factor
@@ -124,25 +125,25 @@
     VT_load_fuse_bend_relief = 0.7
 # Overall fuselage layout
     x_nose_tip           = "0 ft"
-    x_pressure_shell_fwd = "7.3333 ft"   # Pilot eye location (assumption)  VERIFY!
-    x_start_cylinder     = "15.2910 ft"    # Door hinge location (assumption)
-    x_end_cylinder       = "122.9423 ft"  # Location of last seat || Rear door hinge - 1 FT (assumption)
-    x_pressure_shell_aft = "127.7702 ft"  # LE of cone || Rear door lock + 1 FT (assumption)
-    x_cone_end           = "150.25 ft"    # Needs to be verified
-    x_end                = "155.2500 ft" # Fuselage length
+    x_pressure_shell_fwd = "8.1667 ft"   # Pilot eye location (assumption)
+    x_start_cylinder     = "14.64 ft"    # Door hinge location (assumption)
+    x_end_cylinder       = "117.1412 ft"  # Location of last seat || Rear door hinge - 1 FT (assumption)
+    x_pressure_shell_aft = "122.0919 ft"  # LE of cone || Rear door lock + 1 FT (assumption)
+    x_cone_end           = "130.5 ft"    # Needs to be verified
+    x_end                = "133.4165 ft" # Fuselage length
     
 # Power systems and landing gear locations
-    x_HPE_sys = "75ft" #Hydraulic, Pneumatic and Electrical systems
-    x_nose_landing_gear        = "19.3333 ft"
+    x_HPE_sys = "50ft" #Hydraulic, Pneumatic and Electrical systems
+    x_nose_landing_gear        = "15.4167ft"
     x_main_landing_gear_offset = "1 ft" # main LG offset behind the wing lift centroid
 
-    x_APU = "132.3819 ft" # 1 ft behind the H.T L.E Source: Boeing 737 technical guide: http://www.b737.org.uk/apu.htm
+    x_APU = "130.1495 ft" # 1 ft behind the H.T L.E Source: Boeing 737 technical guide: http://www.b737.org.uk/apu.htm
 
-    x_fixed_weight = "7.3333 ft" #Cockpit/ pilots etc Asssume inline with pilot's eye
+    x_fixed_weight = "8.17ft" #Cockpit/ pilots etc Asssume inline with pilot's eye
 
 # Engine positions
-    x_engines = "54.5 ft" # Nacelle L.E location
-    y_critical_engines = " 21.25 ft" # y location of engines that would cause max yaw
+    x_engines = "49.0 ft" # Nacelle L.E location
+    y_critical_engines = "15.8333 ft" # y location of engines that would cause max yaw
 
 
 [Fuselage.Weights]
@@ -182,18 +183,18 @@
     strut_braced_wing = false
 
     sweep = 25.0 # wing sweep in degrees
-    AR    = 7.8
-    maxSpan = " 124.8333 ft"  # 124 ft 10 inches
+    AR    = 9.44
+    maxSpan = "112.58 ft"  # 112 ft 7 inches
 
     # The span-wise chord measurements are obtained from digitized blueprints from planning document.
-    # Root chord: 86.6666 - 59.7037 = 26.9629 ft  (co)
-    # Yehud break chord: 86.6666 - 67.4074 = 19.2592 ft  (cs)
-    # Wing tip cord: 95.5555 - 89.6296  = 5.9259 (ct)
+    # Root chord: 19.2794 - 12.5912 = 6.6882 m  (co)
+    # Yehud break chord: 19.3085 - 14.7431 = 4.5654 m  (cs)
+    # Wing tip cord: 22.8271 - 21.1405 = 1.6866 (ct)
 
-    inner_panel_taper_ratio =  0.7142 #cs/co
-    outer_panel_taper_ratio = 0.2197 #ct/co
+    inner_panel_taper_ratio =  0.6826 #cs/co
+    outer_panel_taper_ratio = 0.2522 #ct/co
 
-    panel_break_location = 0.3404 # eta_s panel break eta location. eta = y/b
+    panel_break_location = 0.2926 # eta_s panel break eta location. eta = y/b
     
     center_box_halfspan = "71.0 in"
     box_width_chord = 0.50
@@ -203,7 +204,7 @@
     hweb_to_hbox = 0.75 #web-height/hbox ratio
     spar_box_x_c = 0.40 # spar box axis x/c location
 
-    x_wing_box = "93.406 ft"  # Assume Wing box starts at 25 % of root x/c -> 86.666 + 0.25* 26.9629
+    x_wing_box = "46.7954 ft" # Assume Wing box starts at 25 % of root x/c -> 12.5912 + 0.25* 6.6882
     z_wing  = "-5.5 ft"
     z_strut = "154 in" #Note only used if `strut_braced_wing = true`
 
@@ -275,24 +276,14 @@
     excrescence_drag_factor = 1.02 # Rivets, sheet breaks etc
 
     [Stabilizers.Htail]
-
-        # Surface area of H.T = ((c_root + c_tip)/2) * b = 221.9636 sq.ft
-        # Tail span: 24.8428 - 2.8096 = 22.0332 ft
-        # AR = (22.0332 * 22.0332) / 221.963
-        AR_Htail = 2.1871
-
-        # Root chord = 145.6296 - 131.2592 =  14.3704
-        # Tip chord = 152.8888 - 147.1111 =   5.7777
-
-        taper = 0.4020
-
-        sweep = 25.0 #typically can be set to be the same as the wings
+        AR_Htail = 6.0
+        taper = 0.25
+        sweep = 26.0 #typically can be set to be the same as the wings
         center_box_halfspan = "2.5 ft"
-        
-        x_Htail = "141.4814 ft"  # This is the center-root chord location
+        x_Htail = "129.1495 ft"
 
-        # H.T is always elevated with respect to wing. -> Measure W.R.T nose -> 16.512109504194363 - 11.258794611984733
-        z_Htail = "5.2533 ft"
+        # H.T is always elevated with respect to wing. -> Measure W.R.T nose -> 4.511930585683299 - 2.4989154013015202
+        z_Htail = "6.6043 ft"
 
         max_tail_download = -0.5 # = CLh/CLmax. Tail download param at max load case.
         
@@ -324,17 +315,11 @@
         web_height_hbox  = 0.75
 
     [Stabilizers.Vtail]
-        # Surface area of H.T = ((c_root + c_tip)/2) * b = 377.7131 sq.ft
-        # Tail span: 43.4660 - 21.083 = 22.383
-        # AR = (22.383 * 22.383) / 377.7131 = 1.5
         AR_Vtail = 2.0
-
-        # Root chord = 168.8924 - 143.9715 = 24.9209
-        # Tip chord = 177.5791 - 168.7500 =  8.8291
-        taper = 0.3543
+        taper = 0.30
         sweep = 25.0
         center_box_halfspan = 0.0
-        x_Vtail = "143.9715 ft"
+        x_Vtail = "119.6165 ft"
         number_Vtails = 1.0
 
         VTsize = "Vv" # Options are "Vv" or "OEI"
@@ -388,15 +373,12 @@
     core_in_clean_flow = true
 
 [Propulsion.Turbomachinery]
-    # Data source: PW2000 Fact sheet
+
     BPR = 5.1
     gear_ratio = 1.0 #Fan gear ratio. 1 => direct drive turbofan
 
-    # PW2000 models have OPR ranging from 25-30
     OPR    = 30.0
     Fan_PR = 1.685
-
-    # PW2000 models have LPC_PR in range 1.5-2.5
     LPC_PR = 2.5
     
     diffuser_PR    = 0.998
