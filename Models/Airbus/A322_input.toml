@@ -271,11 +271,20 @@
     excrescence_drag_factor = 1.02 # Rivets, sheet breaks etc
 
     [Stabilizers.Htail]
-        AR_Htail = 6.0
-        taper = 0.25
-        sweep = 26.0 #typically can be set to be the same as the wings
+
+        # Surface area of H.T = ((c_root + c_tip)/2) * b =  129.1124 sq.ft
+        # Tail span: 20.4986 - 3.2029 = 20.425 ft
+        # AR = (20.425*20.425)/ 129.1124
+
+        AR_Htail = 3.2311
+
+        # Root chord = 10.86 ft 
+        # Tip chord = 4.07 ft
+        taper = 0.3747
+
+        sweep = 25.0 #typically can be set to be the same as the wings
         center_box_halfspan = "2.5 ft"
-        x_Htail = "114.5 ft"
+        x_Htail = "112.6615 ft"
         z_Htail = "0 ft"
 
         max_tail_download = -0.5 # = CLh/CLmax. Tail download param at max load case.
@@ -308,6 +317,7 @@
         web_height_hbox  = 0.75
 
     [Stabilizers.Vtail]
+        # This section needs to be done!
         AR_Vtail = 2.0
         taper = 0.30
         sweep = 25.0
