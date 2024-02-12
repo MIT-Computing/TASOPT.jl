@@ -1,10 +1,10 @@
 # This is a TOML input file that approximates the B737-800 airframe
 
 ["Aircraft Description"]
-    name = "A320-200"
+    name = "A319-200"
     description = """
     This model file estimates the configuration parameters for the 
-    Airbus A320-200 airframe.
+    Airbus A319-200 airframe.
     DATA SOURCE: Airbus Airport Planning Document: Rev ###
     """
 
@@ -55,12 +55,12 @@
 
 [Mission]
     N_missions = 2 # Number of missions to be modeled (first mission is the design mission)
-    pax = [150, 164]            # Number of passengers in each mission
-    max_pax = 190               # Maximum number of passengers for aircarft
+    pax = [124, 134]            # Number of passengers in each mission
+    max_pax = 160               # Maximum number of passengers for aircarft-> exit limit
                                 # B736 seats 108 pax in two-class layout
                                 # B736 seats 123 pax in one-class layout
                                 
-    range = ["3300 nmi", "2000.0 nmi"] # Design Range + second mission range
+    range = ["3750 nmi", "2000.0 nmi"] # Design Range + second mission range
 
     weight_per_pax = "215.0 lbf" # Specify weight per passenger - 
                             # includes luggage [lbm or lbf or kg or N] 
@@ -93,7 +93,7 @@
 
 [Mission.Cruise]
     cruise_alt  = ["35000.0 ft", "30000 ft"]
-    cruise_mach = 0.781
+    cruise_mach = 0.78
     cruise_CL   = 0.57
 
 [Mission.Descent]
@@ -120,24 +120,24 @@
     VT_load_fuse_bend_relief = 0.7
 # Overall fuselage layout
     x_nose_tip           = "0 ft"
-    x_pressure_shell_fwd = "8.99 ft"        # Fuselage forward jacking point
-    x_start_cylinder     = "15.4883 ft"     # Door hinge location (assumption)
-    x_end_cylinder       = "94.9002 ft"     # Location of last seat || Rear door hinge - 1 FT (assumption)
-    x_pressure_shell_aft = "99.4462 ft"     # LE of cone || Rear door lock + 1 FT (assumption)
-    x_cone_end           = "118.27 ft"      # Needs to be verified
-    x_end                = "123.27 ft"      # Fuselage length
+    x_pressure_shell_fwd = "7.99 ft"        # Fuselage forward jacking point -1 ft
+    x_start_cylinder     = "15.7528 ft"     # Door hinge location (assumption)
+    x_end_cylinder       = "81.8899 ft"     # Location of last seat || Rear door hinge - 1 FT (assumption)
+    x_pressure_shell_aft = "86.7029 ft"     # LE of cone || Rear door lock + 1 FT (assumption)
+    x_cone_end           = "105.02 ft"      # Needs to be verified
+    x_end                = "111.02 ft"      # Fuselage length
     
 # Power systems and landing gear locations
     x_HPE_sys = "50ft" #Hydraulic, Pneumatic and Electrical systems
     x_nose_landing_gear        = "16.6300ft"
     x_main_landing_gear_offset = "1 ft" # main LG offset behind the wing lift centroid
 
-    x_APU = "106.6599 ft" # 1 ft behind the H.T L.E Source: Boeing 737 technical guide: http://www.b737.org.uk/apu.htm
+    x_APU = "86.7029 ft" # 1 ft behind the H.T L.E Source: Boeing 737 technical guide: http://www.b737.org.uk/apu.htm
 
-    x_fixed_weight = "8.99ft" #Cockpit/ pilots etc Asssume inline with pilot's eye
+    x_fixed_weight = "7.99ft" #Cockpit/ pilots etc Asssume inline with pilot's eye
 
 # Engine positions
-    x_engines = "36.55 ft" # Nacelle L.E location
+    x_engines = "31.46 ft" # Nacelle L.E location
     y_critical_engines = "18.86 ft" # y location of engines that would cause max yaw
 
 
@@ -179,7 +179,7 @@
 
     sweep = 25.0 # wing sweep in degrees
     AR    = 10.3
-    maxSpan = "117.44 ft"  # 112 ft 7 inches
+    maxSpan = "117.45 ft"  # 112 ft 7 inches
 
     # The span-wise chord measurements are obtained DIRECTLY from blueprints from planning document.
     # Root chord: = 19.91 ft  (co)
@@ -199,7 +199,7 @@
     hweb_to_hbox = 0.75 #web-height/hbox ratio
     spar_box_x_c = 0.40 # spar box axis x/c location
 
-    x_wing_box = "47.4112 ft"  #Assume Wing box starts at 25 % of root x/c -> 42.4337 + 0.25* 19.91
+    x_wing_box = "40.4425 ft"  #Assume Wing box starts at 25 % of root x/c -> 35.4650 + 0.25* 19.91
     z_wing  = "-5.5 ft"
     z_strut = "154 in" #Note only used if `strut_braced_wing = true`
 
