@@ -158,7 +158,7 @@ function PayloadRange()
     ax[:yaxis][:set_minor_locator](ticker.AutoMinorLocator())  # Set minor ticks for the y-axis
 
 
-    savefig("Boeing/Plots/B736_PRD.png")
+    savefig("Boeing/Plots/B736_PRD_wing_fuel.png")
 
 end
 
