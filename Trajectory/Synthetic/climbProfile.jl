@@ -10,14 +10,13 @@ T = 200000 * 0.224809
 W = 700000 * 0.224809
 
 # Air density at sea level in slugs/ft^3 (simplified assumption)
-rho = 1.225 * 0.00194
+rho_sea_level = 1.225 * 0.00194
 
 # Wing area in square feet (ft^2)
 S = 124.6 * 10.7639
 
 # Drag coefficient (simplified assumption)
 C_D = 0.025
-
 
 # Climbing speed in feet per second (ft/s)
 V = 250 * 3.28084
@@ -28,33 +27,55 @@ g = 32.174
 # Convert weight to mass in slugs
 mass = W / g
 
+# Function to calculate thrust at a given altitude
+function thrust_at_altitude(altitude)
+    thrust_decrease_rate = T / 36000
 
-# Calculate Drag in pounds-force (lbf)
-D = 0.5 * C_D * rho * V^2 * S
+    if altitude <=36000
+        return T - thrust_decrease_rate * altitude
+    else
+        #Beyond 36000 ft, thrust decreases more sharply or levels off
+        return  T - thrust_decrease_rate * 36000
+    end
+end
 
-# Calculate climb angle (gamma) in radians
-gamma = asin((T - D) / W)
+function rate_of_climb(T, D, V, W)
 
-# Calculate climb rate in feet per second (ft/s)
-climb_rate = V * sin(gamma)
+    # Compute the steady state rate of climb
+    ROC = V* (T-D)/W
+    return ROC
+end
 
-# Calculate time to climb to a certain altitude in feet
-altitude_target = 10000 * 3.28084  # Target altitude in feet
-
-time_to_climb = altitude_target / climb_rate
-
-# Time array for plotting, assuming a constant time step
-time_step  = 1 # seconds
-
-# Total simulation time in seconds
-total_time = ceil(Int, time_to_climb)
-
-# Time array from 0 to total time in seconds
+# Time marching settings
+time_step = 1
+total_time = 1800
 times = 0:time_step:total_time
 
+# Initialize arrays for altitude and rate of climb
+altitudes = zeros(length(times))
+climb_rates = zeros(length(times))
 
-# Altitute at each time step
-altitudes = [t* climb_rate for t in times]
+# Initial conditions
+current_altitude = 0.0
+
+for i in eachindex(times)
+    global current_altitude
+    global altitudes
+    global climb_rates
+    thrust = thrust_at_altitude(current_altitude)
+    rho = rho_sea_level * exp(-current_altitude / (29.92 * 1000 / g))  # Exponential decrease with altitude
+    D = 0.5 * C_D * rho * V^2 * S
+
+    ROC = rate_of_climb(thrust, D, V, W)
+
+    climb_rates[i] = ROC
+
+    if i > 1
+        # If this is the second collocation point, update the altitude
+        current_altitude += ROC * time_step
+        altitudes[i] = current_altitude
+    end
+end
 
 # Plotting
 fig, ax = subplots()
@@ -71,3 +92,4 @@ fig.dpi = 300
 
 # Save the plot
 fig.savefig("climb_profile_matplotlib.png", dpi  = 300)
+
