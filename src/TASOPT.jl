@@ -21,6 +21,8 @@ using ForwardDiff
 
 const __TASOPTroot__ = @__DIR__
 
+
+
 # Constants and array indices
 include("./misc/constants.jl")
 export ft_to_m, in_to_m, nmi_to_m, deg_to_rad, 
@@ -39,7 +41,7 @@ include("./IO/read_input.jl")
 export read_aircraft_model, load_default_model
 #Load modules
 include(joinpath(__TASOPTroot__,"atmos/atmos.jl"))
-include(joinpath(__TASOPTroot__,"sizing/wsize.jl"))
+include(joinpath(__TASOPTroot__,"sizing/wsizeDev.jl"))
 include(joinpath(__TASOPTroot__,"mission/mission.jl"))
 include(joinpath(__TASOPTroot__,"mission/takeoff.jl"))
 include(joinpath(__TASOPTroot__,"aero/aero.jl"))
@@ -95,8 +97,8 @@ function size_aircraft!(ac::aircraft; iter=35, initwgt=false, Ldebug=false,
         printiter=true, saveOD=false)
 
     Ldebug && println("Max weight iterations = $iter")
-    wsize(ac.pari, ac.parg, view(ac.parm, :, 1), 
-        view(ac.para, :, :, 1), view(ac.pare, :, :, 1),
-        iter, 0.5, 0.9, 0.5, initwgt, 0, 1, Ldebug, printiter, saveOD)
+    wsize(ac.pari, ac.parg, view(ac.parm, :, 1), view(ac.para, :, :, 1), view(ac.pare, :, :, 1), iter, 0.5, 0.9, 0.5, initwgt, 0, 1, Ldebug, printiter, saveOD)
 end
+
+
 end

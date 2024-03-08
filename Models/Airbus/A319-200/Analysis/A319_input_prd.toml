@@ -1,11 +1,11 @@
-# This is a TOML input file that approximates the B737-800 airframe
-
+# This is a  TOML input file and are the design values that will
+# be used by TASOPT
 ["Aircraft Description"]
-    name = "B737-900"
+    name = "A319-100"
     description = """
     This model file estimates the configuration parameters for the 
-    Boeing 737-900 airframe.
-    DATA SOURCE: Boeing Airport Planning Document: D6-58325-7
+        Boeing A319-100 airframe.
+        DATA SOURCE: Airbus Airport Planning Document: Rev ###
     """
 
 #-------------------------------------------------#
@@ -47,24 +47,22 @@
 [Fuel]
     fuel_type       = "Jet-A" # Choices are ... [TODO]
     fuel_in_wing    = true # Is fuel stored in wings?
-    fuel_in_wingcen = true # Is fuel stored in wing center box?
+    fuel_in_wingcen = false # Is fuel stored in wing center box?
     fuel_usability_factor = 0.90 # fraction of max fuel volume that is usable
 
     fuel_temp = 280.0
     fuel_density = 817.0 #kg/m3
 
 [Mission]
-    N_missions = 2 # Number of missions to be modeled (first mission is the design mission)
-    pax = [177, 215]            # Number of passengers in each mission
-    max_pax = 220               # Maximum number of passengers for aircarft
-                                # B736 seats 108 pax in two-class layout
-                                # B736 seats 123 pax in one-class layout
+    N_missions = 5 # Number of missions to be modeled (first mission is the design mission)
+    pax = 160       # Number of passengers in each mission
+    max_pax = 160               # Maximum number of passengers for aircarft
+                                # defines the maximum payload carrying capacity of the aircraft
                                 
-    range = ["3390 nmi", "2950.0 nmi"] # Design Range + second mission range
-
+    range = "3750.0 nmi" # Design Range + second mission range           
     weight_per_pax = "215.0 lbf" # Specify weight per passenger - 
                             # includes luggage [lbm or lbf or kg or N] 
-                            # judging you if you use imperial units
+                            # judging you if you use imperial units but wtvs
 
     fuel_reserves = 0.20 # W_reserveFuel / W_fuelburned
 
@@ -72,8 +70,8 @@
     Vne = "280 kts" # Never exceed IAS for tail loads
 
 [Mission.Takeoff]
-    takeoff_alt = ["0.0 ft", "500 ft"] 
-    takeoff_T = [288.0, 298.0]
+    takeoff_alt = "0 ft"
+    takeoff_T = 298.0
 
     max_balanced_field_length = "8000.0 ft"
     Nland = 6.0 # Max vertical load factor for fuse bending loads
@@ -92,8 +90,8 @@
     minimum_top-of-climb_gradient = 0.015
 
 [Mission.Cruise]
-    cruise_alt  = ["35000.0 ft", "30000 ft"]
-    cruise_mach = 0.79
+    cruise_alt  = "35000 ft"
+    cruise_mach = 0.78
     cruise_CL   = 0.57
 
 [Mission.Descent]
@@ -104,7 +102,7 @@
     cabin_pressure_altitude = "8000.0 ft"
 
 [Fuselage.Geometry]
-    radius = "74 in"       # Fuselage radius
+    radius = "77.76 in"       # Fuselage radius
     dRadius = "15 in"      # Downward shift of lower bubbles
     y_offset = 0.0         # y offset of bubble center
     floor_depth = "5.0 in" # depth of floor beams
@@ -112,12 +110,7 @@
 
     a_nose = 1.65 # Nose radius = Rfuse*(1 - xi^a_nose)^(1/a_nose)
     b_tail = 2.0 # Tail radius = Rfuse*(1 - xi^b_tail)
-
-    # Vetical chord at tail cone base (aligned with rear end of door) (in meters)
-    # Base chord: 5.0672 - 1.9088 = 3.1583
-    # Edge Chord: 4.8937 - 3.7483 = 1.1454
-
-    tailcone_taper = 0.3627
+    tailcone_taper = 0.3
     taper_fuse_to = "edge" # Options are "point" or "edge"
     
     # Tail load fuselage bending moment inertial relief factor
@@ -125,25 +118,25 @@
     VT_load_fuse_bend_relief = 0.7
 # Overall fuselage layout
     x_nose_tip           = "0 ft"
-    x_pressure_shell_fwd = "8.1667 ft"   # Pilot eye location (assumption)
-    x_start_cylinder     = "14.64 ft"    # Door hinge location (assumption)
-    x_end_cylinder       = "117.1412 ft"  # Location of last seat || Rear door hinge - 1 FT (assumption)
-    x_pressure_shell_aft = "122.0919 ft"  # LE of cone || Rear door lock + 1 FT (assumption)
-    x_cone_end           = "130.5 ft"    # Needs to be verified
-    x_end                = "133.4165 ft" # Fuselage length
+    x_pressure_shell_fwd = "7.99 ft"
+    x_start_cylinder     = "15.7528 ft"
+    x_end_cylinder       = "81.8899 ft"
+    x_pressure_shell_aft = "86.7029 ft"
+    x_cone_end           = "105.02 ft"
+    x_end                = "111.02 ft"
     
 # Power systems and landing gear locations
     x_HPE_sys = "50ft" #Hydraulic, Pneumatic and Electrical systems
-    x_nose_landing_gear        = "15.4167ft"
+    x_nose_landing_gear        = "16.6300ft"
     x_main_landing_gear_offset = "1 ft" # main LG offset behind the wing lift centroid
 
-    x_APU = "130.1495 ft" # 1 ft behind the H.T L.E Source: Boeing 737 technical guide: http://www.b737.org.uk/apu.htm
+    x_APU = "86.7029 ft"
 
-    x_fixed_weight = "8.17ft" #Cockpit/ pilots etc Asssume inline with pilot's eye
+    x_fixed_weight = "7.99ft" #Cockpit/ pilots etc
 
 # Engine positions
-    x_engines = "49.0 ft" # Nacelle L.E location
-    y_critical_engines = "15.8333 ft" # y location of engines that would cause max yaw
+    x_engines = "31.46 ft"
+    y_critical_engines = "18.86 ft" # y location of engines that would cause max yaw
 
 
 [Fuselage.Weights]
@@ -183,28 +176,23 @@
     strut_braced_wing = false
 
     sweep = 25.0 # wing sweep in degrees
-    AR    = 9.44
-    maxSpan = "112.58 ft"  # 112 ft 7 inches
+    AR    = 10.3
+    maxSpan = "117.44 ft"
 
-    # The span-wise chord measurements are obtained from digitized blueprints from planning document.
-    # Root chord: 19.2794 - 12.5912 = 6.6882 m  (co)
-    # Yehud break chord: 19.3085 - 14.7431 = 4.5654 m  (cs)
-    # Wing tip cord: 22.8271 - 21.1405 = 1.6866 (ct)
+    inner_panel_taper_ratio = 0.5521  #cs/co
+    outer_panel_taper_ratio = 0.2702 #ct/co
 
-    inner_panel_taper_ratio =  0.6826 #cs/co
-    outer_panel_taper_ratio = 0.2522 #ct/co
-
-    panel_break_location = 0.2926 # eta_s panel break eta location. eta = y/b
+    panel_break_location = 0.3995 # eta_s panel break eta location. eta = y/b
     
     center_box_halfspan = "71.0 in"
     box_width_chord = 0.50
     root_thickness_to_chord = 0.1268
     spanbreak_thickness_to_chord = 0.1266
-    
+
     hweb_to_hbox = 0.75 #web-height/hbox ratio
     spar_box_x_c = 0.40 # spar box axis x/c location
 
-    x_wing_box = "46.7954 ft" # Assume Wing box starts at 25 % of root x/c -> 12.5912 + 0.25* 6.6882
+    x_wing_box = "40.4425 ft"
     z_wing  = "-5.5 ft"
     z_strut = "154 in" #Note only used if `strut_braced_wing = true`
 
@@ -276,14 +264,12 @@
     excrescence_drag_factor = 1.02 # Rivets, sheet breaks etc
 
     [Stabilizers.Htail]
-        AR_Htail = 6.0
-        taper = 0.25
+        AR_Htail = 3.2311
+        taper = 0.3747
         sweep = 26.0 #typically can be set to be the same as the wings
         center_box_halfspan = "2.5 ft"
-        x_Htail = "129.1495 ft"
-
-        # H.T is always elevated with respect to wing. -> Measure W.R.T nose -> 4.511930585683299 - 2.4989154013015202
-        z_Htail = "6.6043 ft"
+        x_Htail = "112.6615 ft"
+        z_Htail = "0 ft"
 
         max_tail_download = -0.5 # = CLh/CLmax. Tail download param at max load case.
         
@@ -319,7 +305,7 @@
         taper = 0.30
         sweep = 25.0
         center_box_halfspan = 0.0
-        x_Vtail = "119.6165 ft"
+        x_Vtail = "110 ft"
         number_Vtails = 1.0
 
         VTsize = "Vv" # Options are "Vv" or "OEI"
@@ -452,28 +438,6 @@
     nacelle_pylon_wetted_area_ratio = 16.0 # = rSnace = wetted area/fan area
     nacelle_local_velocity_ratio = 1.02 # local/freestream velocity
 
-[Propulsion.HeatExchangers] #Default model does not have heat exchangers in the propulsion system
-    recirculation_flag = 0
-    recirculation_temperature = 0
-    latent_heat = 0
-    core_inner_diameter = 0
-
-    precooler_order = 0
-    precooler_effectiveness = 0
-    precooler_inlet_mach = 0
-
-    intercooler_order = 0
-    intercooler_effectiveness = 0
-    intercooler_inlet_mach = 0
-
-    regenerative_order = 0
-    regenerative_effectiveness = 0
-    regenerative_inlet_mach = 0
-
-    turbine_cooler_order = 0
-    turbine_cooler_effectiveness = 0
-    turbine_cooler_inlet_mach = 0
-    
 [Propulsion.Weight]
     engine_access_weight_fraction = 0.10 # feadd    Weadd/Wbare   engine accessories, fuel system fraction 
     pylon_weight_fraction = 0.10  # fpylon   Wpylon/We+a+n engine pylon weight fraction   

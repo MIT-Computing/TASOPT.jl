@@ -1,10 +1,10 @@
 # This is a TOML input file that approximates the B737-800 airframe
 
 ["Aircraft Description"]
-    name = "A319-200"
+    name = "A319-100"
     description = """
     This model file estimates the configuration parameters for the 
-    Airbus A319-200 airframe.
+    Airbus A319-100 airframe.
     DATA SOURCE: Airbus Airport Planning Document: Rev ###
     """
 

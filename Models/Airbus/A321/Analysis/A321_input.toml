@@ -122,10 +122,10 @@
     x_nose_tip           = "0 ft"
     x_pressure_shell_fwd = "8.99 ft"        # Fuselage forward jacking point
     x_start_cylinder     = "14.9768 ft"     # Door hinge location (assumption)
-    x_end_cylinder       = "117.1345 ft"     # Location of last seat || Rear door hinge - 1 FT (assumption)
-    x_pressure_shell_aft = "120.3172 ft"     # LE of cone || Rear door lock + 1 FT (assumption)
+    x_end_cylinder       = "117.1345 ft"    # Location of last seat || Rear door hinge - 1 FT (assumption)
+    x_pressure_shell_aft = "120.3172 ft"    # LE of cone || Rear door lock + 1 FT (assumption)
     x_cone_end           = "141.03 ft"      # Needs to be verified
-    x_end                = "146.03.27 ft"      # Fuselage length
+    x_end                = "146.03.27 ft"   # Fuselage length
     
 # Power systems and landing gear locations
     x_HPE_sys = "50ft" #Hydraulic, Pneumatic and Electrical systems

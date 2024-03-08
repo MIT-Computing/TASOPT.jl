@@ -9,7 +9,7 @@ using TASOPT
 # you can optionally define
 # const tas = TASOPT 
 # to use as a shorthand
-include("..//..//..//..//..//src/misc/index.inc")
+include("..//..//..//..//src/misc/index.inc")
 # import indices for calling parameters
 
 function km2nmi(km)
@@ -45,7 +45,7 @@ end
 
 function PayloadRange()
     lbf_to_N = 4.448222
-    max_pax = 148
+    max_pax = 160
     MAX_PAYLOAD = pax2N(max_pax)
 
     Range_arr_nmi = LinRange(100, 1000, 4)
@@ -70,7 +70,7 @@ function PayloadRange()
     SEC_B = false
 
     # Load default model
-    ac = TASOPT.read_aircraft_model(joinpath(TASOPT.__TASOPTroot__, "..//Models/Boeing/B737/Analysis/B737/B737_input_prd.toml"))
+    ac = TASOPT.read_aircraft_model(joinpath(TASOPT.__TASOPTroot__, "..//Models/Airbus/A319-200/Analysis/A319_input_prd.toml"))
 
     size_aircraft!(ac)
 
@@ -139,7 +139,7 @@ function PayloadRange()
 
     xlabel("Range (1000 nmi)", fontsize=14)
     ylabel("Weight (1000 kg)", fontsize=14)
-    title("Payload Range Diagram: 737-700", fontsize=16, fontweight="bold")
+    title("Payload Range Diagram: A319-100", fontsize=16, fontweight="bold")
     legend()
 
     min_value_x = 0
@@ -172,7 +172,7 @@ function PayloadRange()
     ax[:yaxis][:set_minor_locator](ticker.AutoMinorLocator())  # Set minor ticks for the y-axis
 
 
-    savefig("Plots/B737_PRD_wing_fuel.png")
+    savefig("Plots/A319_100_PRD_wing_fuel.png")
 
 end
 
