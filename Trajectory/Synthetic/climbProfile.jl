@@ -1,6 +1,14 @@
 using Printf
 using PyPlot
 
+include("utils.jl")
+include("atmos.jl")
+
+using .utils
+using .Atmos
+
+
+
 # Constant and initial conditions 
 
 # Thrust in pounds-force (lbf)
@@ -27,9 +35,38 @@ g = 32.174
 # Convert weight to mass in slugs
 mass = W / g
 
+
+function speed_of_sound_at_altitude(altitude_meters::Float64)
+    # Constants
+    γ = 1.4  # Adiabatic index
+    R = 287.05  # Specific gas constant for dry air, J/(kg·K)
+    T0 = 288.15  # Sea level standard temperature, K
+    L = -0.0065  # Temperature lapse rate, K/m
+    TropopauseAltitude = 11000.0  # Altitude of the tropopause, meters
+
+    # Calculate temperature at altitude
+    if altitude_meters <= TropopauseAltitude
+        T = T0 + L * altitude_meters  # Temperature decreases linearly in the troposphere
+    else
+        T = T0 + L * TropopauseAltitude  # Constant temperature in the lower stratosphere
+    end
+
+    # Calculate speed of sound
+    a = sqrt(γ * R * T)
+    return a  # Speed of sound in m/s
+end
+
 # Function to calculate thrust at a given altitude
 function thrust_at_altitude(altitude)
     thrust_decrease_rate = T / 36000
+
+    # Get the mach number at this collocation point
+    a = speed_of_sound_at_altitude(altitude* 0.3048)
+
+    #Compte Mach number at the current altitude
+    Mach = (V* 0.3048)/a
+    println(a)
+    println(Mach)
 
     if altitude <=36000
         return T - thrust_decrease_rate * altitude
@@ -71,8 +108,10 @@ for i in eachindex(times)
     climb_rates[i] = ROC
 
     if i > 1
+        println("Updating altitude")
         # If this is the second collocation point, update the altitude
         current_altitude += ROC * time_step
+        println("Current altitude:", current_altitude)
         altitudes[i] = current_altitude
     end
 end
