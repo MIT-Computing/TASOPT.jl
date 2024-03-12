@@ -339,7 +339,140 @@ function wsize(pari, parg, parm, para, pare,
     ## Initial guess section [Section 3.2 of TASOPT docs]
     # -------------------------------------------------------
 
-    
+    # Allow first iteration
+
+    if (initwgt == 0)
+
+        Whtail = 0.05 * Wpay / parg[igsigfac]
+        Wvtail = Whtail
+        Wwing = 0.5 * Wpay / parg[igsigfac]
+        Wstrut = 0.0
+        Weng = 0.0 * Wpay
+        feng = 0.0
+
+        dxWhtail = 0.0
+        dxWvtail = 0.0
+
+        # Wing planform sizing at start of cruise
+        ip = ipcruise1
+
+        W = 5.0 * Wpay
+
+        # Estimate area
+        S = W / (0.5 * pare[ierho0, ip] * pare[ieu0, ip]^2 * para[iaCL, ip])
+
+        #Estimate span
+        b = sqrt(S * parg[igAR])
+
+        # Span at Yehudi break
+        bs = b * ηs
+
+        # Weight at innner pannel
+        Winn = 0.15 * Wpay / parg[igsigfac]
+
+        # Weight at outer pannel
+        Wout = 0.05 * Wpay / parg[igsigfac]
+
+        # Weight moment
+        dyWinn = Winn * 0.30 * (0.5 * (bs - bo))
+
+        # Weight moment for outer pannel
+        dyWout = Wout * 0.25 * (0.5 * (b - bs))
+
+        # Assign estimated values to geometry arrays -> extract @ second iteration
+        parg[igWhtail] = Whtail
+        parg[igWvtail] = Wvtail
+        parg[igWwing] = Wwing
+        parg[igWstrut] = Wstrut
+        parg[igWeng] = Weng
+        parg[igWinn] = Winn
+        parg[igWout] = Wout
+        parg[igdxWhtail] = dxWhtail
+        parg[igdxWvtail] = dxWvtail
+        parg[igdyWinn] = dyWinn
+        parg[igdyWout] = dyWout
+
+        # wing centroid x-offset form wingbox
+        dxwing, macco = surfdx(b, bs, bo, λt, λs, sweep)
+        xwing = xwbox + dxwing
+        parg[igxwing] = xwing
+
+
+        # tail area centroid locations (assume no offset from sweep initially)
+        parg[igxhtail], parg[igxvtail] = xhbox, xvbox
+
+        # center wingbox chord extent for fuse weight calcs (small effect)
+        cbox = 0.0
+
+        # nacelle, fan duct, core, cowl lengths ℛℯ calcs
+        parg[iglnace] = 0.5 * S / b
+
+        # nacelle Awet/S
+        fSnace = 0.2
+        parg[igfSnace] = fSnace
+
+        # Estimate the fuel required from BRE
+        LoD = 18.0
+        TSFC = 1.0 / 7000.0
+        # Get fligt speed at beginning of cruise
+        V = pare[ieu0, ipcruise1]
+
+        ffburn = (1.0 - exp(-Rangetot * TSFC / (V * LoD))) # ffburn = Wfuel/WMTO
+        ffburn = min(ffburn, 0.8 / (1.0 + freserve))   # 0.8 is the fuel useability?
+
+        # mission-point fuel fractions ⇾ ffuel = Wfuel/WMTO
+        ffuelb = ffburn * (1.0 + freserve)  # start of climb
+        ffuelc = ffburn * (0.90 + freserve)  # start of cruise
+        ffueld = ffburn * (0.02 + freserve)  # start of descent
+        ffuele = ffburn * (0.0 + freserve)  # end of descent (landing)
+
+        # max fuel fraction is at start of climb
+        ffuel = ffuelb # ffuel is max fuel fraction
+
+        # Set initial climb γ = 0 to force intial guesses
+        para[iagamV, :] .= 0.0
+
+        # Put initial-guess weight fractions in mission-point array.
+
+        # These are points before climb starts
+        para[iafracW, ipstatic] = 1.0
+        para[iafracW, iprotate] = 1.0
+        para[iafracW, iptakeoff] = 1.0
+        para[iafracW, ipcutback] = 1.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+    end
+
+
+
+
+
+
+
 
 
 
