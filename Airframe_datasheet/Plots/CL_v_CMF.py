@@ -43,9 +43,9 @@ ax1 = fig1.gca()
 #ax1.plot(H,CL_ST, color = 'black',  label = 'SST', linewidth = 2, marker='s', markersize=10, mec = 'black', mfc = 'steelblue')
 
 ax1.plot(CL_M80, CMF_M80,  label = r'$Ma_{\infty}: 0.80$', linewidth = 2.5,linestyle = 'solid', marker='o', markersize=10, mec = 'black', mfc = 'C0',markeredgewidth=2)
-ax1.plot(CL_M70, CMF_M70,  label = r'$Ma_{\infty}: 0.70$', linewidth = 2.5,linestyle = 'solid', marker='p', markersize=10, mec = 'black', mfc = 'C0',markeredgewidth=2)
-ax1.plot(CL_M60, CMF_M60, label = r'$Ma_{\infty}: 0.60$', linewidth = 2.5,linestyle = 'solid', marker='s', markersize=10, mec = 'black', mfc = 'C0',markeredgewidth=2)
-ax1.plot(CL_M50, CMF_M50,  label = r'$Ma_{\infty}: 0.50$', linewidth = 2.5,linestyle = 'solid', marker='d', markersize=10, mec = 'black', mfc = 'C0',markeredgewidth=2)
+#ax1.plot(CL_M70, CMF_M70,  label = r'$Ma_{\infty}: 0.70$', linewidth = 2.5,linestyle = 'solid', marker='p', markersize=10, mec = 'black', mfc = 'C0',markeredgewidth=2)
+#ax1.plot(CL_M60, CMF_M60, label = r'$Ma_{\infty}: 0.60$', linewidth = 2.5,linestyle = 'solid', marker='s', markersize=10, mec = 'black', mfc = 'C0',markeredgewidth=2)
+#ax1.plot(CL_M50, CMF_M50,  label = r'$Ma_{\infty}: 0.50$', linewidth = 2.5,linestyle = 'solid', marker='d', markersize=10, mec = 'black', mfc = 'C0',markeredgewidth=2)
 
 
 
@@ -86,16 +86,19 @@ ax1.tick_params(which='minor', length=5, width=1.2, direction='in')
 #ax1.yaxis.set_major_locator(ticker.LinearLocator(5))
 #ax1.invert_xaxis()
 
+plt.xlim([-0.3, 1.2])
+plt.ylim([-0.3,0.05])
+
 F = plt.gcf()
 Size = F.get_size_inches()
 F.set_size_inches(Size[0]*1.5, Size[1]*1.5, forward=True) # Set forward to True to resize window along with plot in figure.
 #F.set_size_inches(Size[0]*3.5, Size[1]*1.5, forward=True) # Set forward to True to resize window along with plot in figure.
-plt.tight_layout()
+
+
 plt.rcParams['figure.dpi'] = 300
 plt.rcParams['savefig.dpi'] = 300
-plt.savefig('CL_CMF_B772.png')
 
-#plt.xlim([1.5e-05, 4e-05])
-#plt.ylim([0.475,0.700])
 
+plt.savefig('CL_CMF_B772SM.png')
 plt.show()
+
