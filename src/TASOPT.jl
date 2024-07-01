@@ -49,6 +49,7 @@ include(joinpath(__TASOPTroot__,"structures/structures.jl"))
 include(joinpath(__TASOPTroot__,"propsys/propsys.jl"))
 include(joinpath(__TASOPTroot__,"balance/balance.jl"))
 include(joinpath(__TASOPTroot__,"engine/engine.jl"))
+include(joinpath(__TASOPTroot__,"inform/inform.jl"))
 
 # Off-design performance via BADA file like output
 #  and LTO output for EDB points for use in AEIC
@@ -97,7 +98,7 @@ function size_aircraft!(ac::aircraft; iter=35, initwgt=false, Ldebug=false,
         printiter=true, saveOD=false)
 
     Ldebug && println("Max weight iterations = $iter")
-    wsize(ac.pari, ac.parg, view(ac.parm, :, 1), view(ac.para, :, :, 1), view(ac.pare, :, :, 1), iter, 0.5, 0.9, 0.5, initwgt, 0, 1, Ldebug, printiter, saveOD)
+    wsizeDev(ac.pari, ac.parg, view(ac.parm, :, 1), view(ac.para, :, :, 1), view(ac.pare, :, :, 1), iter, 0.5, 0.9, 0.5, initwgt, 0, 1, Ldebug, printiter, saveOD)
 end
 
 

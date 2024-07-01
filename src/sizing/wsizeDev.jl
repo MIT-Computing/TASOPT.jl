@@ -21,13 +21,13 @@ CAUTION: This is dev version
     - No explicit outputs. Computed quantities are saved to `par` arrays of `aircraft` model.
 """
 
-function wsize(pari, parg, parm, para, pare,
+function wsizeDev(pari, parg, parm, para, pare,
     itermax, wrlx1, wrlx2, wrlx3,
     initwgt, initeng, iairf, Ldebug, printiter, saveODperf)
 
     time_propsys = 0.0
 
-    println("Passing")
+    println("Entering wsizeDev...")
 
     if pari[iiengmodel] == 0
         # Drela engine model
@@ -74,6 +74,8 @@ function wsize(pari, parg, parm, para, pare,
     iVTsize = pari[iiVTsize]
     ixwmove = pari[iixwmove]
     ifwing = pari[iifwing]
+
+    print_table(pari)
 
     # Unpack number of powertrain elements
     nfan = parpt[ipt_nfan]
@@ -438,32 +440,7 @@ function wsize(pari, parg, parm, para, pare,
         para[iafracW, ipstatic] = 1.0
         para[iafracW, iprotate] = 1.0
         para[iafracW, iptakeoff] = 1.0
-        para[iafracW, ipcutback] = 1.0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
+        para[iafracW, ipcutback] = 1.0 
 
     end
 
