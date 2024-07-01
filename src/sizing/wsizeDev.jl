@@ -179,6 +179,8 @@ function wsizeDev(pari, parg, parm, para, pare,
     xapu = parg[igxapu]
     xeng = parg[igxeng]
 
+    print_table_fuselage_params(parm, parg)
+
     # calculate payload proportional weights from weight fractions
     Wapu = Wpaymax * fapu
     Wpadd = Wpaymax * fpadd
@@ -347,12 +349,26 @@ function wsizeDev(pari, parg, parm, para, pare,
 
     if (initwgt == 0)
 
+        println("Starting first iteration....")
+
+        # Estimate H.T weight
         Whtail = 0.05 * Wpay / parg[igsigfac]
+
+        # Estimate H.T weight
         Wvtail = Whtail
+
+        # Estimate wing weight based on payload weight and stress factor
         Wwing = 0.5 * Wpay / parg[igsigfac]
+
+        # Strut weight
         Wstrut = 0.0
+
+        # Engine weight (sized later)
         Weng = 0.0 * Wpay
+
+        # Engine weight fraction
         feng = 0.0
+
 
         dxWhtail = 0.0
         dxWvtail = 0.0
@@ -360,10 +376,13 @@ function wsizeDev(pari, parg, parm, para, pare,
         # Wing planform sizing at start of cruise
         ip = ipcruise1
 
+        # Total weight as some fracion of payload weight
         W = 5.0 * Wpay
-
-        # Estimate area
+        
+        # Compute the surface area of the wing based on design CL at start of cruise, flight speed and L = W
+        # Here, we assume that the wing takes on the entire lift. 
         S = W / (0.5 * pare[ierho0, ip] * pare[ieu0, ip]^2 * para[iaCL, ip])
+
 
         #Estimate span
         b = sqrt(S * parg[igAR])
@@ -418,7 +437,7 @@ function wsizeDev(pari, parg, parm, para, pare,
         # Estimate the fuel required from BRE
         LoD = 18.0
         TSFC = 1.0 / 7000.0
-        # Get fligt speed at beginning of cruise
+        # Get flight speed at beginning of cruise
         V = pare[ieu0, ipcruise1]
 
         ffburn = (1.0 - exp(-Rangetot * TSFC / (V * LoD))) # ffburn = Wfuel/WMTO
@@ -443,6 +462,8 @@ function wsizeDev(pari, parg, parm, para, pare,
         para[iafracW, iprotate] = 1.0
         para[iafracW, iptakeoff] = 1.0
         para[iafracW, ipcutback] = 1.0 
+
+        println("Fist iteration complete!")
 
     end
 

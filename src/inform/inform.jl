@@ -1,8 +1,6 @@
 using Printf
 
 function print_table_design_params(pari)
-    # Define the indices for the variables
-    iifuel, iifwcen, iiwplan, iiengloc, iiengwgt, iiBLIc, iifclose, iiHTsize, iiVTsize, iixwmove, iifwing = 1:11
 
     # Assign the values from the pari array
     ifuel = pari[iifuel]
@@ -69,6 +67,52 @@ function print_table_mission_loads(parm, parg)
     @printf("%-30s: %d\n", "Max payload (Max. Pax * Wpax)", Wpaymax)
     println("-------------------------------------------------")
 end
+
+using Printf
+
+function print_table_fuselage_params(parm, parg)
+
+    # Extract values from the parameter arrays
+    Rfuse = parg[igRfuse]
+    dRfuse = parg[igdRfuse]
+    wfb = parg[igwfb]
+    nfweb = parg[ignfweb]
+    hfloor = parg[ighfloor]
+    xnose = parg[igxnose]
+    xend = parg[igxend]
+    xshell1 = parg[igxshell1]
+    xshell2 = parg[igxshell2]
+    xconend = parg[igxconend]
+    xwbox = parg[igxwbox]
+    xhbox = parg[igxhbox]
+    xvbox = parg[igxvbox]
+    xapu = parg[igxapu]
+    xeng = parg[igxeng]
+
+    # Print the fuselage parameters in a formatted manner
+    println("-------------------------------------------------")
+    println("                Fuselage Parameters              ")
+    println("-------------------------------------------------")
+    @printf("%-50s: %d\n", "Fuselage radius (m)", Rfuse)
+    @printf("%-50s: %d\n", "Bottom bubble downward extension", dRfuse)
+    @printf("%-50s: %d\n", "Fuselage double-bubble half-width (m)", wfb)
+    @printf("%-50s: %d\n", "Number of fuselage web (nfweb)", nfweb)
+    @printf("%-50s: %d\n", "Fuselage floor height (m)", hfloor)
+    @printf("%-50s: %d\n", "Fuselage nose position (m)", xnose)
+    @printf("%-50s: %d\n", "Fuselage trailing edge position (m)", xend)
+    @printf("%-50s: %d\n", "Pressurized shell start position (m)", xshell1)
+    @printf("%-50s: %d\n", "Pressurized shell end position (m)", xshell2)
+    @printf("%-50s: %d\n", "x-end-position of tailcone's primary structure (m)", xconend)
+    @printf("%-50s: %d\n", "x-position of wingbox (m)", xwbox)
+    @printf("%-50s: %d\n", "x-position of H.T wingbox (m)", xhbox)
+    @printf("%-50s: %d\n", "x-position of V.T wingbox (m)", xvbox)
+    @printf("%-50s: %d\n", "x-position of APU (m)", xapu)
+    @printf("%-50s: %d\n", "x-position of engine (m)", xeng)
+    println("-------------------------------------------------")
+end
+
+
+
 
 
 
