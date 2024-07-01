@@ -75,7 +75,7 @@ function wsizeDev(pari, parg, parm, para, pare,
     ixwmove = pari[iixwmove]
     ifwing = pari[iifwing]
 
-    print_table(pari)
+    print_table_design_params(pari)
 
     # Unpack number of powertrain elements
     nfan = parpt[ipt_nfan]
@@ -121,6 +121,8 @@ function wsizeDev(pari, parg, parm, para, pare,
         println("Max payload weight was not set, setting Wpaymax = Wpay")
         Wpaymax = parg[igWpaymax] = max(Wpay, Wpaymax)
     end
+
+    print_table_mission_loads(parm, parg)
 
     # Store the design mission in the geometry array as well
     parg[igRange] = Rangetot

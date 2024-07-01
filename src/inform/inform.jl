@@ -1,6 +1,6 @@
 using Printf
 
-function print_table(pari)
+function print_table_design_params(pari)
     # Define the indices for the variables
     iifuel, iifwcen, iiwplan, iiengloc, iiengwgt, iiBLIc, iifclose, iiHTsize, iiVTsize, iixwmove, iifwing = 1:11
 
@@ -49,3 +49,26 @@ function print_table(pari)
 
     println("-------------------------------------------------")
 end
+
+using Printf
+
+function print_table_mission_loads(parm, parg)
+    # Define the indices for the parameters
+    
+    # Extract values from the parameter arrays
+    Rangetot = parm[imRange]
+    Wpay = parm[imWpay]
+    Wpaymax = parg[igWpaymax]
+
+    # Print the mission loads in a formatted manner
+    println("-------------------------------------------------")
+    println("                Mission Loads                   ")
+    println("-------------------------------------------------")
+    @printf("%-30s: %d\n", "Design range", Rangetot)
+    @printf("%-30s: %d\n", "Typical payload", Wpay)
+    @printf("%-30s: %d\n", "Max payload (Max. Pax * Wpax)", Wpaymax)
+    println("-------------------------------------------------")
+end
+
+
+
